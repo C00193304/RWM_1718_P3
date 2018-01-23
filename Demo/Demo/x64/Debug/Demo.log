@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\jocon\desktop\rwm_1718_p3\demo\demo\main.cpp(25): warning C4305: 'argument': truncation from 'double' to 'float32'
+c:\users\jocon\desktop\rwm_1718_p3\demo\demo\main.cpp(47): warning C4305: 'argument': truncation from 'double' to 'float32'
+  Demo.vcxproj -> C:\Users\jocon\Desktop\RWM_1718_P3\Demo\x64\Debug\Demo.exe
+  Demo.vcxproj -> C:\Users\jocon\Desktop\RWM_1718_P3\Demo\x64\Debug\Demo.pdb (Partial PDB)
