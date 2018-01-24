@@ -1,1 +1,9 @@
-﻿
+﻿  FireWorks.cpp
+  Generating Code...
+  Compiling...
+  main.cpp
+c:\users\jocon\desktop\rwm_1718_p3\rwm_1718_p3\main.cpp(19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\jocon\desktop\rwm_1718_p3\rwm_1718_p3\main.cpp(34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\jocon\desktop\rwm_1718_p3\rwm_1718_p3\main.cpp(38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  Generating Code...
+LINK : fatal error LNK1104: cannot open file 'Box2D.lib'

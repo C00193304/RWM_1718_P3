@@ -1,7 +1,7 @@
 #define SDL_MAIN_HANDLED
 
 #include <iostream>
-#include <FireWorks.h>
+#include "FireWorks.h"
 #include <SDL.h>
 #include <Box2D\Box2D.h>
 #include <time.h>
@@ -16,12 +16,13 @@ int main( int argc, char* args[])
 {
 	bool quit = false;
 	SDL_Event e;
-
-	Fireworks firworks;
+	
+	Particles::Fireworks firworks;
 	b2World* world;
-	Renderer renderer;
-	SDL_Window* window = NULL;
+	SDL_Renderer* renderer;
+	SDL_Window* window = SDL_CreateWindow("fireworks!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
 	SDL_Surface* screenSurface = NULL;
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 	world = new b2World(b2Vec2(0.0, 9.91));
 	while (!quit)
 	{
@@ -31,22 +32,16 @@ int main( int argc, char* args[])
 			{
 				quit = true;
 			}
-			if (SDL_Init(SDL_INIT_VIDEO) < 0)
-			{
-				printf("SDL could not initialise! SDL_ERROR: %s\n", SDL_GetError());
-			}
 			else
-			{
-				window = SDL_CreateWindow("Fireworks", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
-
-				screenSurface = SDL_GetWindowSurface(window);
-				SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0, 0, 0));
-				
+			{	
 				firworks.init(world);
-				firworks.Render(renderer);
+				//firworks.Render(renderer);
 				world->Step(1.0 / 30.0, 8, 3);
-				firworks.Update(60);
-				SDL_UpdateWindowSurface(window);
+				//firworks.Update(60, 255, 0, 0, 0);
+				//SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+				//SDL_RenderClear(renderer);
+				//SDL_RendererFlip Flip = SDL_FLIP_NONE;
+				//SDL_RenderPresent(renderer);
 			}
 		}
 	}

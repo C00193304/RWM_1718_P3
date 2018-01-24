@@ -1,98 +1,136 @@
-#include "FireWorks.h"
+#include "Fireworks.h"
+#include <time.h>
+#include<iostream>
 
-FireWork::FireWork()
+Fireworks::Fireworks(b2World* pWorld , int amount)
 {
-	
-	gravity = 9.81f;
-	baseLineYSpeed = -4.0f;
-	maxYSpeed = -4.0f;
-}
+	m_velocity = b2Vec2(0, 0);
 
-void FireWork::init()
-{
-	float xLocation = ((float)rand() / (float)RAND_MAX) * 800.0f;
-	float xSpeedValue  = -2 + ((float)rand() / (float)RAND_MAX) * 4.0f;
-	float ySpeedValue = baseLineYSpeed + ((float)rand() / (float)RAND_MAX) * maxYSpeed;
+	// Body Definition
+	ParentsParticles.bodyDef.type = b2_kinematicBody;
+	ParentsParticles.bodyDef.linearVelocity = m_velocity;
+	ParentsParticles.bodyDef.position.Set(100,100);//random values
+	ParentsParticles.bodyDef.awake = false;
+	ParentsParticles.body = pWorld->CreateBody(&ParentsParticles.bodyDef);
 
-	for (int i = 0; i < FIREWORK_PARTICLES; i++)
+	// Set Size of particles
+	ParentsParticles.size.w = 5;
+	ParentsParticles.size.h = 5;
+
+	ParentsParticles.dynamicBox.SetAsBox(ParentsParticles.size.w, ParentsParticles.size.h);
+
+	ParentsParticles.body->CreateFixture(&ParentsParticles.dynamicBox, 0);
+
+	if (amount + particles.size() > MAXIMUM_PARTICLES)
 	{
-		x[i] = xLocation;
-		y[i] = 610.0f;
-		xSpeed[i] = xSpeedValue;
-		ySpeed[i] = ySpeedValue;
+		amount = MAXIMUM_PARTICLES - particles.size();
 	}
-	red = ((float)rand() / (float)RAND_MAX);
-	green = ((float)rand() / (float)RAND_MAX);
-	blue = ((float)rand() / (float)RAND_MAX);
-	alpha = 1.0f;
-
-	framesUntilLaunch = ((int)rand() % 400);
-
-	particleSize = 1.0f + ((float)rand() / (float)RAND_MAX) * 3.0f;
-
-	hasExploded = false;
-}
-
-void FireWork::move()
-{
-	for (int i = 0; i < FIREWORK_PARTICLES; i++)
+	for (int i = 0; i < amount; i++)
 	{
-		if (framesUntilLaunch <= 0)
-		{
-			x[i] += xSpeed[i];
-			y[i] += ySpeed[i];
-			ySpeed[i] += gravity;
-		}
-	}
-	framesUntilLaunch--;
+		Particle tempParticle;
+		tempParticle = ParentsParticles;
 
-	if (ySpeed[0] > 0.0f)
-	{
-		for (int i = 0; i < FIREWORK_PARTICLES; i++)
-		{
-			xSpeed[i] = -4 + (rand() / (float)RAND_MAX) * 8;
-			ySpeed[i] = -4 + (rand() / (float)RAND_MAX) * 8;
-		}
-		hasExploded = true;
+		float renderX, renderY;
+		renderX = ((rand() % 1000) - 500.f) / 0.5f;
+		renderY = ((rand() % 1000) - 500.f) / 0.5f;
+		renderY = (rand() % 10 - 70);// / 0.5f;
+		tempParticle.velocity = b2Vec2((rand() % 2), renderY);
+		int red, green, blue;
+
+		red = 255;
+		green = 255;
+		blue = 255;
+		tempParticle.colour = Colour(red, green, blue, rand() % 155);
+		tempParticle.size.w = tempParticle.size.h = 1 + (rand() % 5);
+		tempParticle.expired = 1;
+		tempParticle.bodyDef.awake = true;
+		tempParticle.bodyDef.linearVelocity = tempParticle.velocity;
+		tempParticle.body = pWorld->CreateBody(&tempParticle.bodyDef);
+		particles.push_back(tempParticle);
 	}
 }
 
-void FireWork::explode()
+Fireworks::~Fireworks() {}
+
+void Fireworks::Init(b2World* pWorld, int amount)
 {
-	for (int i = 0; i < FIREWORK_PARTICLES; i++)
+	if (amount + particles.size() > MAXIMUM_PARTICLES)
 	{
-		xSpeed[i] *= 0.99f;
-
-		x[i] += xSpeed[i];
-		y[i] += ySpeed[i];
-
-		ySpeed[i] += gravity;
+		amount = MAXIMUM_PARTICLES - particles.size();
 	}
-	if (alpha > 0.0f)
+	for (int i = 0; i < amount; i++)
 	{
-		alpha -= 0.01f;
-	}
-	else
-	{
-		init();
-	}
+		Particle tempParticle;
+		tempParticle = ParentsParticles;
 
+		float renderX, renderY;
+		renderX = ((rand() % 1000) - 500.f) / 0.5f;
+		renderY = ((rand() % 1000) - 500.f) / 0.5f;
+		renderY = (rand() % 10 - 70);// / 0.5f;
+		tempParticle.velocity = b2Vec2((rand() % 2), renderY);
+		int red, green, blue;
+
+		red = 255;
+		green = 255;
+		blue = 255;
+		tempParticle.colour = Colour(red, green, blue, rand() % 155);
+		tempParticle.size.w = tempParticle.size.h = 1 + (rand() % 5);
+		tempParticle.expired = 1;
+		tempParticle.bodyDef.awake = true;
+		tempParticle.bodyDef.linearVelocity = tempParticle.velocity;
+		tempParticle.body = pWorld->CreateBody(&tempParticle.bodyDef);
+		particles.push_back(tempParticle);
+	}
 }
 
-void FireWork::update()
+void Fireworks::Update(unsigned int deltaTime)
 {
-	for (int i = 0; i < FIREWORK_PARTICLES; i++)
+	if (particleAmount >= 0)
 	{
-		if (hasExploded == true)
-		{
-			explode();
-		}
+		amountParticles(1);
+		particleAmount--;
 	}
-	move();
-
+	for (int i = 0; i < particles.size(); i++)
+	{
+		particles.at(i).body->SetLinearVelocity(particles.at(i).velocity);
+	}
+}
+void Fireworks::Render(Renderer & r)
+{
+	for (int i = 0; i < particles.size(); i++)
+	{
+		Rect rect(particles.at(i).body->GetPosition().x, particles.at(i).body->GetPosition().y, particles.at(i).size.w, particles.at(i).size.h);
+		r.drawRect(rect, particles.at(i).colour);
+	}
 }
 
-void FireWork::Draw()
+void Fireworks::amountParticles(int amount)
 {
+	b2World* world;
+	if (amount + particles.size() > MAXIMUM_PARTICLES)
+	{
+	amount = MAXIMUM_PARTICLES - particles.size();
+	}
+	for (int i = 0; i < amount; i++)
+	{
+	Particle tempParticle;
+	tempParticle = ParentsParticles;
 
+	float renderX, renderY;
+	renderX = ((rand() % 1000) - 500.f) / 0.5f;
+	renderY = ((rand() % 1000) - 500.f) / 0.5f;
+	tempParticle.velocity = b2Vec2(renderX, renderY);
+	int red, green, blue;
+
+	red = 255;
+	green = 255;
+	blue = 255;
+	tempParticle.colour = Colour(red, green, blue, rand() % 255 + 1);
+	tempParticle.size.w = tempParticle.size.h = 1 + (rand() % 5);
+	tempParticle.expired = MAX_TIME;
+	tempParticle.bodyDef.awake = true;
+	tempParticle.bodyDef.linearVelocity = tempParticle.velocity;
+	tempParticle.body = world->CreateBody(&tempParticle.bodyDef);
+	particles.push_back(tempParticle);
+	}
 }
