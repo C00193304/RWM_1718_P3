@@ -48,7 +48,7 @@ namespace Particles
 		bool sparklers = false;
 		bool clusters = false;
 		int fuelCount;
-
+		
 		std::vector<Particle> particles;
 
 		void Fireworks::onEvent(EventListener::Event evt)
@@ -64,7 +64,7 @@ namespace Particles
 
 		}
 
-		void Fireworks::fuelParticles(int amount, int red, int green, int blue, Types type)
+		void Fireworks::fuelParticles(int amount, int red, int green, int blue)
 		{
 			if (amount + particles.size() > FIREWORKS_PARTICLES)
 			{
@@ -122,17 +122,16 @@ namespace Particles
 			Parent.fixtureDef.shape = &Parent.dynamicBox;
 			Parent.fixtureDef.density = 1.5f;
 			Parent.fixtureDef.friction = 1.0f;
-			//ParentParticle.fixtureDef.restitution = 0.9f; // bounce
 			Parent.body->CreateFixture(&Parent.fixtureDef);
 
 			srand(time(NULL));
 		}
 
-		void Fireworks::Update(unsigned int deltaTime, int red, int green, int blue, Types type)
+		void Fireworks::Update(unsigned int deltaTime, int red, int green, int blue)
 		{
 			if (fuelCount >= 0)
 			{
-				fuelParticles(10, red, green, blue, type);
+				fuelParticles(10, red, green, blue);
 				fuelCount--;
 			}
 			for (int i = 0; i < particles.size(); i++)

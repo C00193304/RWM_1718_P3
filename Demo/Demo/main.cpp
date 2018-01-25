@@ -9,7 +9,6 @@
 #include <vector>
 #include "EventListener.h"
 #include "BasicTypes.h"
-#include "Renderer.h"
 #include <stdio.h>
 
 int main( int argc, char* args[])
@@ -34,14 +33,14 @@ int main( int argc, char* args[])
 			}
 			else
 			{	
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+				SDL_RenderClear(renderer);
+				SDL_RendererFlip Flip = SDL_FLIP_NONE;
+				SDL_RenderPresent(renderer);
 				firworks.init(world);
-				//firworks.Render(renderer);
+				firworks.Render(*renderer);
 				world->Step(1.0 / 30.0, 8, 3);
-				//firworks.Update(60, 255, 0, 0, 0);
-				//SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-				//SDL_RenderClear(renderer);
-				//SDL_RendererFlip Flip = SDL_FLIP_NONE;
-				//SDL_RenderPresent(renderer);
+				firworks.Update(60, 255, 255, 255);
 			}
 		}
 	}
