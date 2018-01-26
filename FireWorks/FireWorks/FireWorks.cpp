@@ -25,69 +25,90 @@ namespace Particles
 		{
 				Particle temp;
 				temp = Parent;
-				float rX, rY;
-				rX = ((rand() % 100) - 10) / 0.5f;
-				rY = ((rand() % 1500) - 1000) / 0.5f;
-				/*temp.velocity = b2Vec2(rX, rY);*/
-				int r, g, b;
-				r = rand() % 255;
-				g = rand() % 255;
-				b = rand() % 255;
-				temp.colour = Colour(r, g, b, 255);
+
 				temp.width = temp.height = 1 + (rand() % 5);
 				temp.life = 10;
 				temp.bodyDef.awake = true;
-				//temp.bodyDef.linearVelocity = temp.velocity;
 				temp.body = worlds->CreateBody(&temp.bodyDef);
-				temp.bodyDef.position.Set(temp.body->GetPosition().x, temp.body->GetPosition().y);
+				temp.bodyDef.position.Set(temp.body->GetPosition().x + m_velocity.x, temp.body->GetPosition().y + m_velocity.y);
 				particles.push_back(temp);
-				temp.life--;
-				if (temp.life <= MAX_LIFE)
-				{
-					particles.clear();
-					particles.pop_back();
-				}
+
+				particles.at(i).body->SetLinearVelocity(b2Vec2(Parent.body->GetLinearVelocity().x + ((rand() % 500) - 250), Parent.body->GetLinearVelocity().y + ((rand() % 500) - 250)));
 			}
 	}
 
-	void Fireworks::init(b2World* world,int x, int y)
+	void Fireworks::setColourRed()
 	{
+		Parent.colour.r = (rand() % 230) + 25;
+		Parent.colour.g = 0;
+		Parent.colour.b = 0;
+	}
+
+	void Fireworks::setColourGreen()
+	{
+		Parent.colour.r = 0;
+		Parent.colour.g = (rand() % 230 + 25);
+		Parent.colour.b = 0;
+	}
+
+	void Fireworks::setColourBlue()
+	{
+		Parent.colour.r = 0;
+		Parent.colour.g = 0;
+		Parent.colour.b = (rand() % 230) + 25;
+	}
+
+	void Fireworks::init(b2World* world, int x, int y)
+	{
+		Parent.life = 150;
+		fuelCount = 50;
 		worlds = world;
-		m_velocity = b2Vec2(((rand() % 100) - 1), -50.f);
+		m_velocity = b2Vec2(50, -50.f);
 		Parent.bodyDef.type = b2_kinematicBody;
 		Parent.bodyDef.position.Set(x, y);
-		//Parent.bodyDef.angularVelocity = 10;
-		//Parent.body->ApplyLinearImpulse(b2Vec2(rand() % 100 - 1, -50.f) ,Parent.body->GetWorldCenter(), true);
-		Parent.bodyDef.awake = false;
+		Parent.bodyDef.angularVelocity = 10;
+		Parent.bodyDef.awake = true;
 		Parent.body = world->CreateBody(&Parent.bodyDef);
 		Parent.width = 1;
 		Parent.height = 1;
 		Parent.dynamicBox.SetAsBox(Parent.width, Parent.height);
 		Parent.fixtureDef.shape = &Parent.dynamicBox;
 		Parent.fixtureDef.density = 1.0f;
-		Parent.fixtureDef.friction = 1.0f;
 		Parent.body->CreateFixture(&Parent.fixtureDef);
+		Parent.body->ApplyLinearImpulseToCenter(m_velocity, true);
 		srand(time(NULL));
+		Parent.body->SetLinearVelocity(b2Vec2((rand() % 1000) - 500, (rand() % 1000) - 500));
 	}
 
 	void Fireworks::Update()
 	{
+		Parent.life--;
+
+		if (Parent.life <= 0)
+		{
+			for (int i = 0; i < particles.size(); i++)
+			{
+				particles.erase(particles.begin() + i);
+			}
+			particles.shrink_to_fit();
+		}
 		if (fuelCount >= 0)
 		{
-			fuelParticles(100);
+			fuelParticles(50);
 			fuelCount--;
+			//std::cout << Parent.velocity.x << std::endl;
 		}
-		//for (int i = 0; i < particles.size(); i++)
-		//{
-		//	particles.at(i).body->SetLinearVelocity(particles.at(i).velocity);
-		//}
+		for (int i = 0; i < particles.size(); i++)
+		{
+			particles.at(i).body->SetLinearVelocity(b2Vec2(particles.at(i).body->GetLinearVelocity().x* 0.99, particles.at(i).body->GetLinearVelocity().y + (9.81 / 100)));
+		}
 	}
 	void Fireworks::Render(SDL_Renderer * r)
 	{
 		for (int i = 0; i < particles.size(); i++)
 		{
 			SDL_Rect rect{ particles.at(i).body->GetPosition().x, particles.at(i).body->GetPosition().y, particles.at(i).width, particles.at(i).height };
-			SDL_SetRenderDrawColor(r, rand() % 255, rand() % 255, rand() % 255, 255);
+			SDL_SetRenderDrawColor(r, Parent.colour.r, Parent.colour.g, Parent.colour.b, Parent.colour.a);
 			SDL_RenderFillRect(r, &rect);
 		}
 	}

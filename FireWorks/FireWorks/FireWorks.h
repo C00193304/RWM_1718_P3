@@ -6,6 +6,7 @@
 #include "EventListener.h"
 #include <time.h>
 #include <random>
+#include <iostream>
 
 
 
@@ -52,6 +53,10 @@ namespace Particles
 	public:
 		Fireworks() {};
 		~Fireworks() {};
+
+		void setColourRed();
+		void setColourGreen();
+		void setColourBlue();
 
 		void init(b2World* world, int x, int y);
 		void Update();

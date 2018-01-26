@@ -27,6 +27,7 @@ int main(int argc, char* args[])
 	Particles::Fireworks *fireworks;
 	fireworks = new Particles::Fireworks();
 	fireworks->init(world, 500, 500);
+	fireworks->setColourRed();
 	while (!quit)
 	{
 		while (SDL_PollEvent(&e) != 0)
@@ -37,16 +38,17 @@ int main(int argc, char* args[])
 			}
 			else
 			{
-				world->Step(0.1f, 1, 100);
-				fireworks->Render(renderer);
-				fireworks->Update();
 
-				SDL_RendererFlip Flip = SDL_FLIP_NONE;
-				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-				SDL_RenderPresent(renderer);
-				SDL_RenderClear(renderer);
 			}
 		}
+		world->Step(0.1f, 1, 100);
+		fireworks->Render(renderer);
+		fireworks->Update();
+
+		SDL_RendererFlip Flip = SDL_FLIP_NONE;
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+		SDL_RenderPresent(renderer);
+		SDL_RenderClear(renderer);
 	}
 	return 0;
 }
