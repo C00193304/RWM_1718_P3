@@ -14,8 +14,8 @@
 //create a method that changes its life time of when the particles delte themselves.
 //create a method that makes a firework of your choice into a sparkler instead of a rocket explosion
 //make a set life method to set the life in miliseconds of the particle so it dies after that
-const int FIREWORKS_PARTICLES = 100;
-const int MAX_LIFE = 1000;
+const int FIREWORKS_PARTICLES = 1000;
+const int MAX_LIFE = 0;
 
 namespace Particles
 {
@@ -46,19 +46,15 @@ namespace Particles
 		Particle Parent;
 		b2World* worlds;
 		b2Vec2 m_velocity;
-
+		void onEvent(EventListener::Event evt);
+		void fuelParticles(int amount);
+		b2Body * GetBody() { return Parent.body; };
 	public:
 		Fireworks() {};
-		Fireworks(b2World*, int amount, int x, int y, int fuelAmount);
 		~Fireworks() {};
 
-		//void Fireworks::init(b2World* world);
-		void Fireworks::onEvent(EventListener::Event evt);
-		void Fireworks::fuelParticles(int amount);
-		void Fireworks::Update();
-		void Fireworks::Render(SDL_Renderer * r);
-
-		b2Body * GetBody() { return Parent.body; };
-		//SDL_Rect * GetRect() { return Parent.m_rect; }
+		void init(b2World* world, int x, int y);
+		void Update();
+		void Render(SDL_Renderer * r);
 	};
 }

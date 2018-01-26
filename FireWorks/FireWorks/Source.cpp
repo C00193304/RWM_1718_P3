@@ -21,10 +21,12 @@ int main(int argc, char* args[])
 	SDL_Renderer * renderer;
 	SDL_Window* window = SDL_CreateWindow("fireworks!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
-	world = new b2World(b2Vec2(0.0, 0.001f));
+	world = new b2World(b2Vec2(0.0, 9.81f));
+	world->SetGravity(b2Vec2(0.0f, 9.81f));
 
-	Particles::Fireworks fireworks(world, 100, 500, 500, 100);
-
+	Particles::Fireworks *fireworks;
+	fireworks = new Particles::Fireworks();
+	fireworks->init(world, 500, 500);
 	while (!quit)
 	{
 		while (SDL_PollEvent(&e) != 0)
@@ -35,12 +37,12 @@ int main(int argc, char* args[])
 			}
 			else
 			{
-				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-				fireworks.Render(renderer);
-				fireworks.Update();
-
+				world->Step(0.1f, 1, 100);
+				fireworks->Render(renderer);
+				fireworks->Update();
 
 				SDL_RendererFlip Flip = SDL_FLIP_NONE;
+				SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 				SDL_RenderPresent(renderer);
 				SDL_RenderClear(renderer);
 			}

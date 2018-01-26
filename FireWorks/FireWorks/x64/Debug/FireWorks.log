@@ -1,3 +1,10 @@
-﻿  Source.cpp
+﻿  FireWorks.cpp
+c:\users\jocon\desktop\rwm_1718_p3\fireworks\fireworks\fireworks.cpp(21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\jocon\desktop\rwm_1718_p3\fireworks\fireworks\fireworks.cpp(56): warning C4244: 'argument': conversion from 'int' to 'float32', possible loss of data
+c:\users\jocon\desktop\rwm_1718_p3\fireworks\fireworks\fireworks.cpp(58): warning C4244: 'argument': conversion from 'int' to 'float32', possible loss of data
+c:\users\jocon\desktop\rwm_1718_p3\fireworks\fireworks\fireworks.cpp(65): warning C4244: 'argument': conversion from 'int' to 'float32', possible loss of data
+c:\users\jocon\desktop\rwm_1718_p3\fireworks\fireworks\fireworks.cpp(70): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\jocon\desktop\rwm_1718_p3\fireworks\fireworks\fireworks.cpp(89): warning C4838: conversion from 'const float32' to 'int' requires a narrowing conversion
+c:\users\jocon\desktop\rwm_1718_p3\fireworks\fireworks\fireworks.cpp(89): warning C4244: 'initializing': conversion from 'const float32' to 'int', possible loss of data
   FireWorks.vcxproj -> C:\Users\jocon\Desktop\RWM_1718_P3\FireWorks\x64\Debug\FireWorks.exe
   FireWorks.vcxproj -> C:\Users\jocon\Desktop\RWM_1718_P3\FireWorks\x64\Debug\FireWorks.pdb (Partial PDB)
