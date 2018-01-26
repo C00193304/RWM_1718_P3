@@ -1,0 +1,10 @@
+﻿  FireWorks.cpp
+FireWorks.cpp(21): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+FireWorks.cpp(68): warning C4244: 'argument': conversion from 'int' to 'float32', possible loss of data
+FireWorks.cpp(74): warning C4244: 'argument': conversion from 'int' to 'float32', possible loss of data
+FireWorks.cpp(79): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+FireWorks.cpp(80): warning C4244: 'argument': conversion from 'int' to 'float32', possible loss of data
+FireWorks.cpp(103): warning C4244: 'argument': conversion from 'double' to 'float32', possible loss of data
+FireWorks.cpp(110): warning C4838: conversion from 'const float32' to 'int' requires a narrowing conversion
+FireWorks.cpp(110): warning C4244: 'initializing': conversion from 'const float32' to 'int', possible loss of data
+  FireWorks.vcxproj -> C:\Users\jocon\Desktop\RWM_1718_P3\FireWorks\x64\Release\FireWorks.lib
